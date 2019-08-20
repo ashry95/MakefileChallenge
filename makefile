@@ -1,31 +1,35 @@
-vpath %.c ./Src
-
-dep= ./Dependencies/
-
+src_path = ./Src
+inc_path = ./Inc
+dep_path = ./Dependencies
+inc= -I./Inc/
+src_files = $(subst $(src_path)/,,$(wildcard $(src_path)/*.c))
+obj_files1 = $(src_files:.c=.o)
+obj_files2 = ashry-yehia-seif-tharwat.o
+dep_files = $(src_files:.c=.d)
+dep_files2 = $(addprefix $(dep_path)/,$(dep_files))
+link_target = app.exe
+clean_files = $(obj_files1) $(link_target) $(dep_files2)
 cc= gcc
 
-CFlag= 
+CFlag= -O0 -g -std=  -Wall 
 
 
-src= DIO.c  \
-     LCD.c  \
-     main.c \
-     
+# pull in dependency info for *existing* .o files
+-include $(dep_files2)
 
-inc= -I./Inc/
+# print for debugging
+print-%  :
+	@echo $* = $($*)
 
-obj= DIO.o  \
-     LCD.o  \
-     main.o \
+# remove compilation products
+clean :
+	del $(clean_files)
 
-all : $(obj)
-	cd Dependencies ; $(cc) $^ ashry-yehia-seif-tharwat.o -o  $@
-
-
-clean:
-
-
+# compile
 %.o : %.c
-	$(cc) -c $(inc)  $< -o $(dep)$@
+	$(cc) -c $(CFLAG) -I$(inc_path) $< -o $@
+	$(cc) -MM -I$(inc_path) $< > $(dep_path)\$*.d
 
-
+#link
+$(link_target) : $(obj_files1) $(obj_files2) #$(dep_files2)
+	$(cc) $^ -o $@
