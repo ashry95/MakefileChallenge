@@ -13,7 +13,7 @@ dep_files2 = $(subst .c,.d,$(subst $(src_path)/,$(dep_path)\,$(src_files2)))
 link_target = app.exe
 clean_files = $(obj_files1) $(link_target) $(dep_files2)
 
-path %.c $(src_path)
+vpath %.c $(src_path)
 
 print-%  :
 	@echo $* = $($*)
@@ -23,3 +23,9 @@ clean :
 
 %.o : %.c
 	$(cc) -c -I$(inc_path) $< -o $@
+
+%.d : %.c
+	$(cc) -M -I$(inc_path) $< -MF $(dep_path)\$@
+	
+$(link_target) : $(obj_files1) $(obj_files2) $(dep_files1)
+	$(cc) $^ -o $@
