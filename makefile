@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 cc = gcc
 
 src_files = $(subst $(src_path)/,,$(wildcard $(src_path)/*.c))
@@ -9,11 +10,15 @@ dep_files = $(src_files:.c=.d)
 dep_files2 = $(addprefix $(dep_path)\,$(dep_files))
 link_target = app.exe
 clean_files = $(obj1_files) $(link_target) $(dep_files2)
+=======
+cc = gcc
+>>>>>>> yehia
 
 src_path = ./Src
 inc_path = ./Inc
 dep_path = .\Dependencies
 
+<<<<<<< HEAD
 -include $(dep_files2)
 
 
@@ -22,10 +27,30 @@ vpath %.h $(inc_path)
 
 print-%  :
 	@echo $* = $($*)
+=======
+src_files = $(subst $(src_path)/,,$(wildcard $(src_path)/*.c))
+obj_files1 = $(src_files:.c=.o)
+obj_files2 = ashry-yehia-seif-tharwat.o
+dep_files = $(src_files:.c=.d)
+dep_files2 = $(addprefix $(dep_path)\,$(dep_files))
+link_target = app.exe
+clean_files = $(obj_files1) $(link_target) $(dep_files2)
 
-clean : 
+vpath %.c $(src_path)
+>>>>>>> yehia
+
+# pull in dependency info for *existing* .o files
+-include $(dep_files2)
+
+# print for debugging
+print-%  :
+	@echo $* = $($*)
+
+# remove compilation products
+clean :
 	del $(clean_files)
 
+<<<<<<< HEAD
 %.o : %.c %.h
 	$(cc) -c -I$(inc_path) $< -o $@
 	$(cc) -MM -I$(inc_path) $< > $(dep_path)\$%.d
@@ -64,9 +89,19 @@ clean :
 # compile
 %.o : %.c
 	$(cc) -c $(CFLAG) -I$(inc_path) $< -o $@
+=======
+# compile
+%.o : %.c
+	$(cc) -c -I$(inc_path) $< -o $@
+>>>>>>> yehia
 	$(cc) -MM -I$(inc_path) $< > $(dep_path)\$*.d
 
 #link
 $(link_target) : $(obj_files1) $(obj_files2) #$(dep_files2)
 	$(cc) $^ -o $@
+<<<<<<< HEAD
 >>>>>>> 28fb8db1c331c1e9418722e840de47a40b2b94cd
+=======
+
+all : $(link_target)
+>>>>>>> yehia
