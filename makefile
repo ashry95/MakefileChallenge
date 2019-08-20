@@ -13,12 +13,18 @@ dep_path = ./Dependencies
 
 vpath %.c $(src_path)
 vpath %.h $(inc_path)
+#vpath %.o $(dep_path)
+
+print-%  :
+	@echo $* = $($*)
 
 clean : 
 	del $(clean_files)
 
 %.o : %.c %.h
 	$(cc) -c -I$(inc_path) $< -o $@
+	$(cc) -MM -I$(inc_path) $< > $(dep_path)\$*.d
 	
 app.exe : $(OBJ)
-	$(cc) $^ -o $@
+	$(cc) -I$(dep_path) $^ -o $@
+	
